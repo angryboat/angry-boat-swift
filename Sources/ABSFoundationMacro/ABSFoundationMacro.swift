@@ -14,6 +14,7 @@ struct ABSFoundationMacro : CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         UUIDMacro.self,
         URLMacro.self,
+        LocalizedEnumMacro.self,
     ]
 }
 
@@ -36,5 +37,16 @@ public struct MacroError : Error, CustomStringConvertible {
     
     internal static func invalidArgumentType<V>(_ type: V.Type, _ index: Int) -> MacroError {
         return MacroError(name: "ArgumentMacroError", message: "Invalid argument at index \(index), expected: \(String(describing: type))")
+    }
+    
+    internal static func invalidArgumentType<V>(_ type: V.Type, _ index: String) -> MacroError {
+        return MacroError(name: "ArgumentMacroError", message: "Invalid argument for \(index), expected: \(String(describing: type))")
+    }
+    
+    internal static func unknownLabeledArgument(_ name: String?) -> MacroError {
+        if let name {
+            return MacroError(name: "LabeledArgumentMacroError", message: "Unknown labeled argument: \(name)")
+        }
+        return MacroError(name: "LabeledArgumentMacroError", message: "Invalid labeld argument, label name is nil?")
     }
 }

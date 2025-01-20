@@ -12,3 +12,6 @@ public macro UUID(_ uuidString: String) -> UUID = #externalMacro(module: "ABSFou
 
 @freestanding(expression)
 public macro URL(_ urlString: String) -> URL = #externalMacro(module: "ABSFoundationMacro", type: "URLMacro")
+
+@attached(member, names: named(localizedDescription))
+public macro LocalizedEnum(prefix: String = "", separator: String = ".", bundle: Bundle? = nil) = #externalMacro(module: "ABSFoundationMacro", type: "LocalizedEnumMacro")
