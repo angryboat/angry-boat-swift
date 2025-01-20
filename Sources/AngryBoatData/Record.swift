@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import OSLog
 
 public protocol Record : PersistentModel {
 }
@@ -32,6 +33,10 @@ extension Record {
     public static func exists(inContext context: ModelContext, where predicate: Predicate<Self>? = nil, expectedCount: Int = 1) throws -> Bool {
         return try self.count(inContext: context, where: predicate) == expectedCount
     }
+}
+
+extension Record {
+    public var logger: os.Logger { Logger }
 }
 
 #if canImport(SwiftUI)
