@@ -8,10 +8,10 @@
 import Foundation
 
 @freestanding(expression)
-public macro UUID(_ uuidString: String) -> UUID = #externalMacro(module: "ABSFoundationMacro", type: "UUIDMacro")
+public macro UUID(_ uuidString: String) -> UUID = #externalMacro(module: "ABSMacro", type: "UUIDMacro")
 
 @freestanding(expression)
-public macro URL(_ urlString: String) -> URL = #externalMacro(module: "ABSFoundationMacro", type: "URLMacro")
+public macro URL(_ urlString: String) -> URL = #externalMacro(module: "ABSMacro", type: "URLMacro")
 
 @attached(member, names: named(localizedDescription))
-public macro LocalizedEnum(prefix: String = "", separator: String = ".", bundle: Bundle? = nil) = #externalMacro(module: "ABSFoundationMacro", type: "LocalizedEnumMacro")
+public macro LocalizedEnum(prefix: String = "", separator: String = ".", bundle: Bundle? = nil) = #externalMacro(module: "ABSMacro", type: "LocalizedEnumMacro")

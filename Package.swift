@@ -19,26 +19,18 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-syntax", from: "600.0.1")
     ],
     targets: [
-        .macro(name: "AngryBoatDataMacro", dependencies: [
-            .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-            .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
-        ]),
-        .macro(name: "ABSFoundationMacro", dependencies: [
+        .macro(name: "ABSMacro", dependencies: [
             .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
             .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
         ]),
         .target(name: "AngryBoatUI", dependencies: ["ABSFoundation"]),
-        .target(name: "AngryBoatData", dependencies: ["AngryBoatDataMacro"]),
-        .target(name: "ABSFoundation", dependencies: ["ABSFoundationMacro"]),
+        .target(name: "AngryBoatData", dependencies: ["ABSMacro"]),
+        .target(name: "ABSFoundation", dependencies: ["ABSMacro"]),
         .testTarget(name: "AngryBoatUITests", dependencies: ["AngryBoatUI"]),
-        .testTarget(name: "AngryBoatDataTests", dependencies: ["AngryBoatData", "AngryBoatDataMacro"]),
+        .testTarget(name: "AngryBoatDataTests", dependencies: ["AngryBoatData"]),
         .testTarget(name: "ABSFoundationTests", dependencies: ["ABSFoundation"]),
-        .testTarget(name: "AngryBoatDataMacroTests", dependencies: [
-            "AngryBoatDataMacro",
-            .product(name: "SwiftSyntaxMacroExpansion", package: "swift-syntax")
-        ]),
-        .testTarget(name: "ABSFoundationMacroTests", dependencies: [
-            "ABSFoundationMacro",
+        .testTarget(name: "ABSMacroTests", dependencies: [
+            "ABSMacro",
             .product(name: "SwiftSyntaxMacroExpansion", package: "swift-syntax")
         ])
     ]
