@@ -13,9 +13,3 @@ extension Logger {
         self.init(subsystem: bundle.bundleIdentifier ?? "com.angryboat.ABSFoundation-Unknown", category: category)
     }
 }
-
-@LocalizedEnum(bundle: .main)
-enum Foo {
-    case bar
-    case baz
-}
