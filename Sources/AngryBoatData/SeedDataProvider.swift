@@ -9,7 +9,7 @@ import SwiftData
 
 @attached(member, names: named(init), named(modelContainer))
 @attached(extension, conformances: SeedDataProvider)
-public macro SeedDataProvider() = #externalMacro(module: "AngryBoatDataMacro", type: "SeedDataProviderMacro")
+public macro SeedDataProvider() = #externalMacro(module: "ABSMacro", type: "SeedDataProviderMacro")
 
 @MainActor
 public protocol SeedDataProvider {

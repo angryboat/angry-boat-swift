@@ -10,7 +10,7 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftSyntaxMacroExpansion
 
-@testable import ABSFoundationMacro
+@testable import ABSMacro
 
 @Test
 func UUIDMacroTest() {
@@ -185,6 +185,33 @@ func LocalizedEnumMacroWithCustomPrefixAndSeparatorAndBundle() {
         #expect(equal(result, expected))
 }
 
-func equal(_ lhs: Syntax, _ rhs: String) -> Bool {
-    lhs.description.trimmingCharacters(in: .whitespacesAndNewlines) == rhs.trimmingCharacters(in: .whitespacesAndNewlines)
+@Test
+func SeedDataProviderTest() {
+    let source: SourceFileSyntax =
+        """
+        @SeedDataProvider
+        struct TestProvider {
+        }
+        """
+    
+    let result = source.expand(macros: ["SeedDataProvider": SeedDataProviderMacro.self]) {
+        return BasicMacroExpansionContext(lexicalContext: [$0])
+    }
+    
+    let expected =
+        """
+        struct TestProvider {
+        
+            public let modelContainer: ModelContainer
+        
+            public init(modelContainer: ModelContainer) {
+                self.modelContainer = modelContainer
+            }
+        }
+        
+        extension TestProvider: SeedDataProvider {
+        }
+        """
+    
+    #expect(equal(result, expected))
 }

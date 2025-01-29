@@ -1,22 +1,10 @@
 //
-//  ABSFoundationMacro.swift
+//  MacroError.swift
 //  angry-boat-swift
 //
-//  Created by Maddie Schipper on 1/18/25.
+//  Created by Maddie Schipper on 1/28/25.
 //
 
-import Foundation
-import SwiftCompilerPlugin
-import SwiftSyntaxMacros
-
-@main
-struct ABSFoundationMacro : CompilerPlugin {
-    let providingMacros: [Macro.Type] = [
-        UUIDMacro.self,
-        URLMacro.self,
-        LocalizedEnumMacro.self,
-    ]
-}
 
 public struct MacroError : Error, CustomStringConvertible {
     public let name: String
