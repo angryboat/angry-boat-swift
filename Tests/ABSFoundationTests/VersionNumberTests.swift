@@ -16,7 +16,7 @@ import ABSFoundation
     ("1.1", (1, 1, 0)),
     ("1.1.5", (1, 1, 5)),
 ])
-func `creates a valid version number`(_ input: (String, (Int, Int, Int))) throws {
+func createValidVersionNumber(_ input: (String, (Int, Int, Int))) throws {
     let (string, expected) = input
     let version = try VersionNumber(string: string)
     
@@ -32,7 +32,7 @@ func `creates a valid version number`(_ input: (String, (Int, Int, Int))) throws
     ("2025.72.5000", "2025.79.1453", true),
     ("2023.100.5000", "2025.79.1453", true),
 ])
-func `test compare version numbers`(_ input: (String, String, Bool)) throws {
+func compareVersionNumber(_ input: (String, String, Bool)) throws {
     let (lStr, rStr, exepected) = input
 
     let lhs = try VersionNumber(string: lStr)
@@ -50,7 +50,7 @@ func `test compare version numbers`(_ input: (String, String, Bool)) throws {
     ("1", "1.0.0", true),
     ("1.5", "1.5.0", true),
 ])
-func `test equality comparison`(_ input: (String, String, Bool)) throws {
+func equalVersionNumber(_ input: (String, String, Bool)) throws {
     let (lStr, rStr, expected) = input
 
     let lhs = try VersionNumber(string: lStr)
