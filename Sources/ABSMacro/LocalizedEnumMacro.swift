@@ -19,6 +19,7 @@ public struct LocalizedEnumMacro : MemberMacro {
         
         let prefix = try arguments.optionalStringLiteralValue(for: "prefix")
         let separator = try arguments.optionalStringLiteralValue(for: "separator") ?? "."
+        let visibility = try arguments.optionalStringLiteralValue(for: "visibility") ?? ""
         
         var optionalBundleExpr = ""
         if let expression = arguments["bundle"] {
@@ -49,7 +50,7 @@ public struct LocalizedEnumMacro : MemberMacro {
         }
         """
         
-        let localizedString = try VariableDeclSyntax("var localizedDescription: String { \(raw: switchStatement) }")
+        let localizedString = try VariableDeclSyntax("\(raw: visibility) var localizedDescription: String { \(raw: switchStatement) }")
         
         return [
             DeclSyntax(localizedString)

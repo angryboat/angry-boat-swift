@@ -186,6 +186,41 @@ func LocalizedEnumMacroWithCustomPrefixAndSeparatorAndBundle() {
 }
 
 @Test
+func LocalizedEnumMacroWithCustomVisibility() {
+    let source: SourceFileSyntax =
+    """
+    @LocalizedEnum(visibility: "public")
+    enum Foo {
+        case bar
+        case baz
+    }
+    """
+    
+    let expected =
+    """
+    enum Foo {
+        case bar
+        case baz
+    
+        public var localizedDescription: String {
+            switch self {
+            case .bar:
+                return String(localized: "Foo.bar")
+            case .baz:
+                return String(localized: "Foo.baz")
+            }
+        }
+    }
+    """
+    
+    let result = source.expand(macros: ["LocalizedEnum": LocalizedEnumMacro.self]) {
+        return BasicMacroExpansionContext(lexicalContext: [$0])
+    }
+    
+    #expect(equal(result, expected))
+}
+
+@Test
 func SeedDataProviderTest() {
     let source: SourceFileSyntax =
         """
