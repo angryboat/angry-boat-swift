@@ -100,4 +100,39 @@ public enum Keychain {
         let message = SecCopyErrorMessageString(status, nil) as String?
         throw Error.status(status, message)
     }
+    
+    public static func listAccounts(service: String, secClass: CFString = kSecClassGenericPassword) throws -> Set<String> {
+        let query: [String: AnyObject] = [
+            kSecAttrService as String: service as AnyObject,
+            kSecClass as String: secClass as AnyObject,
+            kSecMatchLimit as String: kSecMatchLimitAll,
+            kSecReturnAttributes as String: kCFBooleanTrue,
+            kSecReturnRef as String: kCFBooleanTrue
+        ]
+        
+        var items: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &items)
+        
+        switch status {
+        case errSecSuccess:
+            guard let queryResults = items as? [[String: AnyObject]] else {
+                throw Error.invalidTypeFormat
+            }
+            var results = Set<String>()
+            for item in queryResults {
+                guard let account = item[kSecAttrAccount as String] as? String else {
+                    continue
+                }
+                
+                results.insert(account)
+            }
+            
+            return results
+        case errSecItemNotFound:
+            return []
+        default:
+            let message = SecCopyErrorMessageString(status, nil) as String?
+            throw Error.status(status, message)
+        }
+    }
 }

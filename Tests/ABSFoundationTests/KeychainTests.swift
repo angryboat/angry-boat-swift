@@ -48,4 +48,20 @@ struct KeychainTests {
         
         try Keychain.delete(service: service, account: #function)
     }
+    
+    @Test(arguments: ["ABS-Testing-2"])
+    func listAccounts(_ service: String) throws {
+        try? Keychain.delete(service: service, account: "foo-1")
+        try? Keychain.delete(service: service, account: "foo-2")
+        try? Keychain.delete(service: service, account: "bar-1")
+        
+        try Keychain.create("Foo-1".data(using: .utf8)!, service: service, account: "foo-1")
+        try Keychain.create("Foo-2".data(using: .utf8)!, service: service, account: "foo-2")
+        try Keychain.create("Bar-1".data(using: .utf8)!, service: service, account: "bar-1")
+        
+        let accounts = try Keychain.listAccounts(service: service)
+        #expect(accounts.contains { $0 == "foo-1" } == true)
+        #expect(accounts.contains { $0 == "foo-2" } == true)
+        #expect(accounts.contains { $0 == "bar-1" } == true)
+    }
 }
