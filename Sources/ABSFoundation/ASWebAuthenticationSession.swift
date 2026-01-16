@@ -70,24 +70,32 @@ extension ASWebAuthenticationSession {
     }
 }
 
+@MainActor
 fileprivate class WebAuthenticationSessionContextProvider : NSObject, ASWebAuthenticationPresentationContextProviding {
-    
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        #if os(macOS)
-        if let keyWindow = NSApplication.shared.keyWindow {
-            return keyWindow
-        }
-        return ASPresentationAnchor()
-        #elseif os(iOS)
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            if let keyWindow = scene.windows.first(where: \.isKeyWindow) {
+
+    nonisolated func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        let getAnchor = {
+            #if os(macOS)
+            if let keyWindow = NSApplication.shared.keyWindow {
                 return keyWindow
             }
-            return ASPresentationAnchor(windowScene: scene)
+            return ASPresentationAnchor()
+            #elseif os(iOS)
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                if let keyWindow = scene.windows.first(where: \.isKeyWindow) {
+                    return keyWindow
+                }
+                return ASPresentationAnchor(windowScene: scene)
+            }
+            return ASPresentationAnchor()
+            #else
+            return ASPresentationAnchor()
+            #endif
         }
-        return ASPresentationAnchor()
-        #else
-        return ASPresentationAnchor()
-        #endif
+
+        if Thread.isMainThread {
+            return getAnchor()
+        }
+        return DispatchQueue.main.sync(execute: getAnchor)
     }
 }
