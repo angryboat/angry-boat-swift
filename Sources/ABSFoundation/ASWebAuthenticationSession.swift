@@ -24,17 +24,21 @@ extension ASWebAuthenticationSession {
             var session: ASWebAuthenticationSession!
             session = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackScheme) { callbackURL, error in
                 withExtendedLifetime((context, session)) {
-                    if let error {
-                        continuation.resume(throwing: error)
-                    } else if let callbackURL {
-                        continuation.resume(returning: callbackURL)
-                    } else {
-                        let error = WebAuthenticationSessionError(message: String(
-                                localized: "WebAuthenticationSessionError.invalidCallbackState",
-                                defaultValue: "Invalid Callback State"
+                    // Callback happens on arbitrary queue
+                    // get back to the main queue before resuming the continuation
+                    DispatchQueue.main.async {
+                        if let error {
+                            continuation.resume(throwing: error)
+                        } else if let callbackURL {
+                            continuation.resume(returning: callbackURL)
+                        } else {
+                            let error = WebAuthenticationSessionError(message: String(
+                                    localized: "WebAuthenticationSessionError.invalidCallbackState",
+                                    defaultValue: "Invalid Callback State"
+                                )
                             )
-                        )
-                        continuation.resume(throwing: error)
+                            continuation.resume(throwing: error)
+                        }
                     }
                 }
             }
