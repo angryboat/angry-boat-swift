@@ -10,7 +10,7 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 
 public struct LocalizedEnumMacro : MemberMacro {
-    public static func expansion(of node: AttributeSyntax, providingMembersOf declaration: some DeclGroupSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+    public static func expansion(of node: AttributeSyntax, providingMembersOf declaration: some DeclGroupSyntax, conformingTo: [TypeSyntax], in context: some MacroExpansionContext) throws -> [DeclSyntax] {
         guard let enumDecl = declaration.as(EnumDeclSyntax.self) else {
             throw MacroError(name: "Invalid Usage", message: "LocalizedEnum must be applied to an enum declaration")
         }

@@ -71,7 +71,7 @@ extension ASWebAuthenticationSession {
 }
 
 fileprivate class WebAuthenticationSessionContextProvider : NSObject, ASWebAuthenticationPresentationContextProviding {
-    
+    @MainActor
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         #if os(macOS)
         if let keyWindow = NSApplication.shared.keyWindow {
