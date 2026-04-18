@@ -13,6 +13,7 @@ import SwiftSyntaxMacros
 struct ABSMacro : CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         UUIDMacro.self,
+        ULIDMacro.self,
         URLMacro.self,
         LocalizedEnumMacro.self,
         SeedDataProviderMacro.self,
