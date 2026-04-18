@@ -10,6 +10,10 @@ import Foundation
 @freestanding(expression)
 public macro UUID(_ uuidString: String) -> UUID = #externalMacro(module: "ABSMacro", type: "UUIDMacro")
 
+/// Creates a ``ULID`` from a string literal, validating the format at compile time.
+@freestanding(expression)
+public macro ULID(_ ulidString: String) -> ULID = #externalMacro(module: "ABSMacro", type: "ULIDMacro")
+
 @freestanding(expression)
 public macro URL(_ urlString: String) -> URL = #externalMacro(module: "ABSMacro", type: "URLMacro")
 

@@ -13,6 +13,66 @@ import SwiftSyntaxMacroExpansion
 @testable import ABSMacro
 
 @Test
+func ULIDMacroTest() {
+    let source: SourceFileSyntax =
+        """
+        #ULID("01KPGR1TJKWP32J4AK9YAQTCFH")
+        """
+
+    let expected = "try! ULID(string: \"01KPGR1TJKWP32J4AK9YAQTCFH\")"
+
+    let result = source.expand(macros: ["ULID": ULIDMacro.self]) {
+        return BasicMacroExpansionContext(lexicalContext: [$0])
+    }
+
+    #expect(equal(result, expected))
+}
+
+@Test
+func ULIDMacroTestLowercase() {
+    let source: SourceFileSyntax =
+        """
+        #ULID("01kpgr1tjkwp32j4ak9yaqtcfh")
+        """
+
+    let expected = "try! ULID(string: \"01kpgr1tjkwp32j4ak9yaqtcfh\")"
+
+    let result = source.expand(macros: ["ULID": ULIDMacro.self]) {
+        return BasicMacroExpansionContext(lexicalContext: [$0])
+    }
+
+    #expect(equal(result, expected))
+}
+
+@Test
+func ULIDMacroTestInvalidCharacter() {
+    let source: SourceFileSyntax =
+        """
+        #ULID("01KPGR1TJKWP32J4AK9YAQTCFI")
+        """
+
+    let result = source.expand(macros: ["ULID": ULIDMacro.self]) {
+        return BasicMacroExpansionContext(lexicalContext: [$0])
+    }
+
+    #expect(!equal(result, "try! ULID(string: \"01KPGR1TJKWP32J4AK9YAQTCFI\")"))
+}
+
+@Test
+func ULIDMacroTestOverflow() {
+    let source: SourceFileSyntax =
+        """
+        #ULID("8ZZZZZZZZZZZZZZZZZZZZZZZZZ")
+        """
+
+    let result = source.expand(macros: ["ULID": ULIDMacro.self]) {
+        return BasicMacroExpansionContext(lexicalContext: [$0])
+    }
+
+    #expect(!equal(result, "try! ULID(string: \"8ZZZZZZZZZZZZZZZZZZZZZZZZZ\")"))
+}
+
+@Test
 func UUIDMacroTest() {
     let source: SourceFileSyntax =
         """
